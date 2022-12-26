@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <WiFi.h>
+#include "buzzer.hpp"
 
 class ServerSetup {
     public:

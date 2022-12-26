@@ -3,6 +3,7 @@
 WiFiServer server(80);
 
 void setup() {
+  initialBuzzer();
   ServerSetup srv;
 
   Serial.println(srv.sd.readFile(SD, "/testeSdCard.txt"));
