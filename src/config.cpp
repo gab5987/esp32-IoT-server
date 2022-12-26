@@ -5,10 +5,10 @@ ServerSetup::ServerSetup() {
 
     while (!sd.init()) {
         Serial.println("SD Card Mount Failed");
+        runBuzzer(500000);
         delay(1000);
     }
-
-
+    
     String config = sd.readFile(SD, "/config.conf");
 
     std::vector<std::string> tokens;
