@@ -8,7 +8,7 @@ ServerSetup::ServerSetup() {
         runBuzzer(500000);
         delay(1000);
     }
-    
+
     String config = sd.readFile(SD, "/config.conf");
 
     std::vector<std::string> tokens;
@@ -33,6 +33,7 @@ ServerSetup::ServerSetup() {
         exit(1);
     }
 
+    Serial.print("Connecting to "); Serial.println(ssid);
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED) {

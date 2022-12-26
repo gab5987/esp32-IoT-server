@@ -8,6 +8,8 @@
 #include <sstream>
 #include <WiFi.h>
 #include "buzzer.hpp"
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 
 class ServerSetup {
     public:
