@@ -11,6 +11,26 @@ const store = new Vuex.Store({
       { name: "Reprehenderit", status: true, adr: "192.168.0.47", type: "cloud" },
       { name: "Typhoon", status: true, adr: "192.168.0.127", type: "network-wired" },
     ],
+    internal: {
+      status: undefined,
+      self: "a",
+      memory: {
+        ram: "",
+        rom: {
+          total: "",
+          avaliable: "",
+        },
+      },
+      network: {
+        ip: "",
+        ip6: "",
+        router: "",
+        mac: "",
+        gateway: "",
+        sub: "",
+        dns: "",
+      },
+    }
   },
 
   /*
@@ -29,12 +49,26 @@ const store = new Vuex.Store({
     UPDATE_SERVER_STATUS(state, payload) {
       state.servers[payload].status ^= true;
     },
+    UPDATE_INTERNAL_STATUS(state, payload) {
+      state.internal.self = payload.self;
+      state.internal.status = payload.status;
+      state.internal.memory.ram = payload.memory.ram;
+      state.internal.memory.rom.total = payload.memory.rom.total;
+      state.internal.memory.rom.avaliable = payload.memory.rom.avaliable;
+      state.internal.network.ip = payload.network.ip;
+      state.internal.network.mac = payload.network.mac;
+      state.internal.network.gateway = payload.network.gateway;
+      state.internal.network.dns = payload.network.dns;
+    }
   },
 
   actions: {
     serverStatus({ commit }, server) {
       commit("UPDATE_SERVER_STATUS", server);
     },
+    internalStatus({ commit }, server) {
+      commit("UPDATE_INTERNAL_STATUS", server);
+    }
   },
 });
 
@@ -151,28 +185,58 @@ Vue.component("server", {
     </div>`,
 });
 
+Vue.component("server-status", { 
+  template: `<div class="server-list" style="padding-top: 30px;"><slot></slot></div> `
+});
+
+Vue.component("embedded-status", { 
+  props: ["title"],
+  template: `
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">{{title}}</h1>
+        <slot></slot>
+    </header>
+  `
+ });
+
 //Vue.use(Vuex);
 const dashboard = new Vue({
   el: "dashboard",
   data: () => {
     return {
       servers: store.state.servers,
+      internal: store.state.internal,
     };
-  },
-  methods: {
-    updateServerStatus(server) {
-      store.dispatch("serverStatus", server);
-    },
   },
 
   mounted() {
     setInterval(
-      () =>
+      async () => {
+        await fetch("http://localhost:3333")
+          .then((response) =>  response.json())
+          .then((data) => store.dispatch("internalStatus", {
+            status: data.status,
+            self: data.self,
+            memory: {
+              ram: data.memory.ram,
+              rom: {
+                total: data.memory.rom.total,
+                avaliable: data.memory.rom.avaliable,
+              },
+            },
+            network: {
+              ip: data.network.ip,
+              mac: data.network.mac,
+              gateway: data.network.gateway,
+              dns: data.network.dns,
+            }
+          }));
         store.dispatch(
           "serverStatus",
           Math.floor(Math.random() * (this.servers.length - 0) + 0)
-        ),
-      5000
+        );
+      },
+      1000
     );
   },
 });

@@ -141,6 +141,23 @@ body::-webkit-scrollbar {
           animation: none;
 }
 
+.internal-status {
+  font-size: medium;
+  padding: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.internal-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+  margin: 2rem;
+}
+.item-status {
+  color: indigo;
+}
+
 @-webkit-keyframes alertblink {
   0% {
     background: rgba(210, 44, 50, 0);
