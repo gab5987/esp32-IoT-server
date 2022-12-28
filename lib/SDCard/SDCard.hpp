@@ -1,7 +1,6 @@
 #ifndef __HELPER_HPP__
 #define __HELPER_HPP__
 
-#include <Arduino.h>
 #include <FS.h>
 #include <SD.h>
 #include <SPI.h>

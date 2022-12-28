@@ -9,8 +9,7 @@ ServerSetup::ServerSetup() {
         delay(1000);
     }
 
-    String config = sd.readFile(SD, "/config.conf");
-
+    String config = sd.readFile(SD, "/mdk512/config.conf");
     std::vector<std::string> tokens;
     std::stringstream ss(config.c_str());
     std::string word;
