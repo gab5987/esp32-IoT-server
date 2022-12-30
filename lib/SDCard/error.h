@@ -1,6 +1,7 @@
 #ifndef __ERROR__
 #define __ERROR__
 
+// error codes
 #define ERROR_FILE_OPEN 0x00001
 #define ERROR_FILE_WRITE 0x00002
 #define ERROR_FILE_APPEND 0x00003

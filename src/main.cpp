@@ -1,7 +1,9 @@
 #include "main.hpp"
 
+// creates a web server instance
 AsyncWebServer server(80);
 
+// function and macro to create a JSON with the system status
 #define addJson(var, key, value) var += String("\"" + String(key) + "\":" + String(value) + ",")
 String getSystemStatus() {
   String j = "{";
@@ -18,42 +20,32 @@ String getSystemStatus() {
   return j;
 }
 
+// creates a database instance
+Heidrun_db db;
+
 void setup() {
+
+  // beeps the buzzer to indicate that the device is starting up
   runBuzzer();
-  ServerSetup srv;
+  ServerSetup srv; // initiate the server (see on config.cpp)
 
-  Heidrun_db db;
-  db.begin();
-  // db.createDatabase("banco_de_teste");
-  // Serial.println(db.run_sql("banco_de_teste", "tabela", CREATE_TABLE, "v1 v2 v3").status);
-  // for(auto i = 0; i < 10; i++) {
-  //   Serial.println(db.run_sql("banco_de_teste", "tabela", INSERT_ROW, "valor1 valor2 valor3").status);
-  // }
-
-  // std::vector<String> teste = db.run_sql("banco_de_teste", "tabela", SELECT, "v1 v2 FROM 5").result;
-
-  // for(auto i = 0; i < teste.size(); i++) {
-  //   Serial.println(teste[i]);
-  // }
+  db.begin(); // initiate the database
   
+  // This route returns a webpage with the system status, such as free heap, mac address, etc.
+  // Also contains a list of all the devices in the database and its status
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SD, "/mdk512/web/index/index.html", "text/html");
   });
 
-  server.on("/teste", HTTP_POST, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "Hello, POST: " + request->arg("teste"));
-  });
-
+  // This route returns a JSON with the system status, such as free heap, mac address, etc.
   server.on("/api/internal", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "application/json", getSystemStatus());
   });
 
-  server.on("/api/external", HTTP_GET, [](AsyncWebServerRequest *request) {
-    
-  });
-
+  // Serves the static files on the SD card
   server.serveStatic("/", SD, "/");
   server.begin();
 }
 
+// loop is not used
 void loop() { return; }

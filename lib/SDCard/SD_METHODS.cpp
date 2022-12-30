@@ -1,6 +1,7 @@
 #include "SDCard.hpp"
 #include "error.h"
 
+// macro to handle errors, prints the error message and returns the error code
 #define ERROR_HANDLER(message, error) { \
         Serial.print(message); Serial.print(" "); Serial.print(error); \
         return error; \
@@ -11,6 +12,12 @@ bool SDCard::init() {
     return SD.begin() ? true : false;
 }
 
+/*
+    Essentially all the files are stored in the SD card as a binary file.
+    So the file is opened, the message is written and the file is closed, at the end its all just some kinda of text file.
+*/
+
+// creates a file in the SD card, given th path and the message to write
 int SDCard::writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
 
@@ -23,6 +30,7 @@ int SDCard::writeFile(fs::FS &fs, const char * path, const char * message){
     return __null;
 }
 
+// appends a message to a file, given the path and the message to append
 int SDCard::appendFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Appending to file: %s\n", path);
 
@@ -35,6 +43,7 @@ int SDCard::appendFile(fs::FS &fs, const char * path, const char * message){
     return __null;
 }
 
+// reads a file, given the path and returns the data as a string
 String SDCard::readFile(fs::FS &fs, const char * path) {
     Serial.printf("Reading file: %s\n", path);
 

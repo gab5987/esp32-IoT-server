@@ -5,6 +5,7 @@
 #include <SD.h>
 #include <SPI.h>
 
+// For each method, see on SD_METHODS.cpp
 class SDCard {
 public:
   bool init();
