@@ -5,7 +5,10 @@
 
 #include <SDCard.hpp>
 #include <heidrun.hpp>
-#include <sstream> // to be removed, stringstream uses around 20% of the esp flash memory
+/* 
+    DEPREACTED LIBRARIES
+    #include <sstream> // to be removed, stringstream uses around 20% of the esp flash memory
+*/
 #include "buzzer.hpp"
 
 #include <WiFi.h>

@@ -17,13 +17,28 @@ ServerSetup::ServerSetup() {
 
     // Reads the configuration file and stores the words in a vector of tokens
     String config = sd.readFile(SD, "/mdk512/config.conf");
-    std::vector<std::string> tokens;
-    std::stringstream ss(config.c_str());
-    std::string word;
-    while(ss >> word) {
-        if(word == " ") continue;
-        tokens.push_back(word);
+    std::vector<String> tokens;
+    /*  
+        // This code uses the stringstream library, but it uses around 20% of the flash memory
+        // Deprecated, but it's here for reference or in case it's needed
+
+        std::stringstream ss(config.c_str());
+        std::string word;
+        while(ss >> word) {
+            if(word == " ") continue;
+            tokens.push_back(word);
+        }
+    */
+
+    String buff = "";
+    for(auto i = 0; i < config.length(); i++) {
+        if(config[i] != ' ') buff += config[i];
+        else if(config[i] == ' ' && buff != "") {
+            tokens.push_back(buff);
+            buff = "";
+        }
     }
+    if(buff != "") tokens.push_back(buff);
 
     /*
         The configuration file is a text file with the following format:
