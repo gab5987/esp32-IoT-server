@@ -14,6 +14,7 @@
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <ESPmDNS.h>
 
 // Class to initiate the server, see on config.cpp
 class ServerSetup {
