@@ -67,6 +67,8 @@ ServerSetup::ServerSetup() {
     // Connects to the WiFi
     Serial.print("Connecting to ");
     Serial.println(ssid);
+
+    WiFi.setHostname("heidrun-server");
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED) {
@@ -79,7 +81,7 @@ ServerSetup::ServerSetup() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 
-    if (!MDNS.begin("esp32"))
+    if (!MDNS.begin("heidrun"))
         Serial.println("Error setting up MDNS responder!");
     else
         Serial.println("mDNS responder started");
