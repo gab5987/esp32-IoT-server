@@ -36,12 +36,11 @@
       <div class="internal-status">
         <div class="internal-items">
           <p>Server name: {{ internal.self }}</p>
-          <p>Memory usage: {{ internal.memory.ram }}</p>
+          <p>Memory usage: {{ internal.memory.ram.used }}</p>
+          <p>Memory avaliable: {{ internal.memory.ram.avaliable }}</p>
+          <p>Core Temperature: {{ internal.coreTemp }}</p>
           <p>SD card total: {{ internal.memory.rom.total }}</p>
           <p>SD card usage: {{ internal.memory.rom.avaliable }}</p>
-          <p>IPv4 address: {{ internal.network.ip }}</p>
-          <p>IPv6 address: {{ internal.network.ip6 }}</p>
-          <p>Router address: {{ internal.network.router }}</p>
           <p>Mac address: {{ internal.network.mac }}</p>
           <p>Gateway: {{ internal.network.gateway }}</p>
           <p>Subnet mask: {{ internal.network.sub }}</p>

@@ -13,23 +13,25 @@ const store = new Vuex.Store({
     ],
     internal: {
       status: undefined,
-      self: "a",
+      self: "NULL",
+      coreTemp: "NULL",
       memory: {
-        ram: "",
+        ram: {
+          used: "NULL",
+          avaliable: "NULL",
+        },
         rom: {
-          total: "",
-          avaliable: "",
+          total: "NULL",
+          avaliable: "NULL",
         },
       },
       network: {
-        ip: "",
-        ip6: "",
-        router: "",
-        mac: "",
-        gateway: "",
-        sub: "",
-        dns: "",
+        mac: "NULL",
+        gateway: "NULL",
+        sub: "NULL",
+        dns: "NULL",
       },
+      coreTemp: "NULL",
     }
   },
 
@@ -52,12 +54,15 @@ const store = new Vuex.Store({
     UPDATE_INTERNAL_STATUS(state, payload) {
       state.internal.self = payload.self;
       state.internal.status = payload.status;
-      state.internal.memory.ram = payload.memory.ram;
+      state.internal.coreTemp = payload.coreTemp;
+      state.internal.memory.ram.used = payload.memory.ram.used;
+      state.internal.memory.ram.avaliable = payload.memory.ram.avaliable;
       state.internal.memory.rom.total = payload.memory.rom.total;
       state.internal.memory.rom.avaliable = payload.memory.rom.avaliable;
       state.internal.network.ip = payload.network.ip;
       state.internal.network.mac = payload.network.mac;
       state.internal.network.gateway = payload.network.gateway;
+      state.internal.network.sub = payload.network.sub;
       state.internal.network.dns = payload.network.dns;
     }
   },
@@ -212,31 +217,34 @@ const dashboard = new Vue({
   mounted() {
     setInterval(
       async () => {
-        await fetch("http://localhost:3333")
+        await fetch("http://192.168.0.87/api/internal")
           .then((response) =>  response.json())
           .then((data) => store.dispatch("internalStatus", {
-            status: data.status,
             self: data.self,
+            coreTemp: data.coreTemp + " °C",
             memory: {
-              ram: data.memory.ram,
+              ram: {
+                used: data.usedMemory + " Bytes",
+                avaliable: data.freeHeap + " Bytes",
+              },
               rom: {
-                total: data.memory.rom.total,
-                avaliable: data.memory.rom.avaliable,
+                total: data.sdSize + " MB",
+                avaliable: data.sdUsed + " MB",
               },
             },
             network: {
-              ip: data.network.ip,
-              mac: data.network.mac,
-              gateway: data.network.gateway,
-              dns: data.network.dns,
-            }
+              mac: data.macAddress,
+              gateway: data.gatewayIP.replace(/(\d{3})(\d{2})(\d{2})(\d{1})/, "$1.$2.$3.$4"),
+              sub: data.subnetMask.replace(/(\d{3})(\d{2})(\d{2})(\d{1})/, "$1.$2.$3.$4"),
+              dns: data.dnsIP.replace(/(\d{3})(\d{2})(\d{2})(\d{1})/, "$1.$2.$3.$4"),
+            },
           }));
         store.dispatch(
           "serverStatus",
           Math.floor(Math.random() * (this.servers.length - 0) + 0)
         );
       },
-      1000
+      5000
     );
   },
 });
